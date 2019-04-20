@@ -5,7 +5,7 @@ public class Main {
 
         try {
             new Script().run();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

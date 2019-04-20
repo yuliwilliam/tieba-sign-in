@@ -3,6 +3,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -139,6 +140,15 @@ class SeleniumUtility {
             present = false;
         }
         return present;
+    }
+
+    static void executeJavaScript(WebDriver driver, String browser, String javaScript) {
+        if (browser.equalsIgnoreCase("chrome")) {
+            ((ChromeDriver) driver).executeScript(javaScript);
+        }
+        if (browser.equalsIgnoreCase("ie")) {
+            ((InternetExplorerDriver) driver).executeScript(javaScript);
+        }
     }
 
     static void setDimension(WebDriver driver, int numOfThread) {

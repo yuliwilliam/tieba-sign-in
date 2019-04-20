@@ -1,22 +1,17 @@
 import org.openqa.selenium.*;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Script {
 
     private String username;
     private String password;
-    private List<String> keywords;
 
     public Script() {
         this.username = "";
@@ -62,9 +57,9 @@ public class Script {
 
 
         // security message or scan qr code, wait user to operate
-        while (SeleniumUtility.checkExist(driver, "id", "passport-login-pop") || SeleniumUtility.checkExist(driver, "id", "TANGRAM__25__wrapper")
+        while (SeleniumUtility.checkExist(driver, "id", "passport-login-pop")
+                || SeleniumUtility.checkExist(driver, "id", "TANGRAM__25__wrapper")
                 || SeleniumUtility.checkExist(driver, "id", "TANGRAM__25__article")) {
-
         }
 
 
@@ -74,7 +69,7 @@ public class Script {
         driver.findElement(By.cssSelector("#ihome_nav_wrap > ul > li:nth-child(4) > div > p > a")).click();
 
         //switch to new tab
-        ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(tabs.size() - 1));
 
         int numOfTieba = 0;
@@ -92,18 +87,22 @@ public class Script {
                 System.out.print(tieba.getText());
                 String url = tieba.getAttribute("href");
 
-                ((JavascriptExecutor) driver).executeScript("window.open()");
+                SeleniumUtility.executeJavaScript(driver, "chrome", "window.open()");
                 //switch to new tab
-                tabs = new ArrayList<String>(driver.getWindowHandles());
+                tabs = new ArrayList<>(driver.getWindowHandles());
                 driver.switchTo().window(tabs.get(tabs.size() - 1));
                 driver.get(url);
-
                 SeleniumUtility.waitPresence(driver, "tagName", "body");
-                driver.findElement(By.cssSelector("#signstar_wrapper")).click();
+
+                while (!driver.findElement(By.cssSelector("#signstar_wrapper > a")).getText().contains("连续")) {
+                    SeleniumUtility.executeJavaScript(driver, "chrome", "document.querySelector(\"#signstar_wrapper > a\").click()");
+                    SeleniumUtility.waitPresence(driver, "tagName", "body");
+                }
+
                 System.out.println(" -- signed");
-                numOfTieba ++;
+                numOfTieba++;
                 driver.close();
-                tabs = new ArrayList<String>(driver.getWindowHandles());
+                tabs = new ArrayList<>(driver.getWindowHandles());
                 driver.switchTo().window(tabs.get(tabs.size() - 1));
             }
 
@@ -115,13 +114,12 @@ public class Script {
                 }
             }
 
-            if (!driver.findElement(By.cssSelector("#j_pagebar > div")).getText().contains("下一页")){
+            if (!driver.findElement(By.cssSelector("#j_pagebar > div")).getText().contains("下一页")) {
                 isLastPage = !isLastPage;
             }
-
         }
         driver.quit();
-        System.out.println("finished all "+numOfTieba+" tieba sign in");
+        System.out.println("finished all " + numOfTieba + " tieba sign in");
     }
 }
 
