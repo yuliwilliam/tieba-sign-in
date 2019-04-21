@@ -30,13 +30,15 @@ public class Script {
         SeleniumUtility.waitVisible(driver, "id", "passport-login-pop");
 
 
+        //find and save qr code to local
         String qrcodeURL = driver.findElement(By.className("tang-pass-qrcode-img")).getAttribute("src");
         while (qrcodeURL.contains("loading")) {
             qrcodeURL = driver.findElement(By.className("tang-pass-qrcode-img")).getAttribute("src");
         }
         URL qrcode = new URL(qrcodeURL);
         BufferedImage saveImage = ImageIO.read(qrcode);
-        ImageIO.write(saveImage, "png", new File(System.getProperty("user.dir") + "/qrcode.png"));
+        String path = System.getProperty("user.dir") + "/qrcode.png";
+        ImageIO.write(saveImage, "png", new File(path));
 
         //login by username and password
         if (false) {
@@ -61,9 +63,12 @@ public class Script {
                 || SeleniumUtility.checkExist(driver, "id", "TANGRAM__25__wrapper")
                 || SeleniumUtility.checkExist(driver, "id", "TANGRAM__25__article")) {
         }
-
-
         SeleniumUtility.waitPresence(driver, "tagName", "body");
+
+        //delete local qrcode file after log in for security
+        File file = new File(path);
+        file.delete();
+
         driver.get("http://tieba.baidu.com/home/main?un=leedsyu&id=b1286c656564737975e807&fr=index");
         SeleniumUtility.waitPresence(driver, "tagName", "body");
         driver.findElement(By.cssSelector("#ihome_nav_wrap > ul > li:nth-child(4) > div > p > a")).click();
