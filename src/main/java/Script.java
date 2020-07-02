@@ -87,7 +87,7 @@ public class Script {
             WebElement table = driver.findElement(By.cssSelector("#like_pagelet > div.forum_main > div.forum_table > table > tbody"));
             List<WebElement> listOfTieba = table.findElements(By.tagName("td"));
             for (int i = 0; i < listOfTieba.size(); i += 4) {
-                //
+
                 WebElement tieba = listOfTieba.get(i).findElement(By.tagName("a"));
                 System.out.print(tieba.getText());
                 String url = tieba.getAttribute("href");
@@ -102,10 +102,23 @@ public class Script {
                 while (!driver.findElement(By.cssSelector("#signstar_wrapper > a")).getText().contains("连续")) {
                     SeleniumUtility.executeJavaScript(driver, "chrome", "document.querySelector(\"#signstar_wrapper > a\").click()");
                     SeleniumUtility.waitPresence(driver, "tagName", "body");
-                }
 
+                    //captcha page
+//                    while (SeleniumUtility.checkExist(driver, "id", "dialogJbody")) {
+//                        String captchaURL = driver.findElement(By.cssSelector("#dialogJbody > div > div.tbui_captcha_container > div > div:nth-child(2) > span.j_captcha_content > span.tbui_captcha_img_wrap.j_captcha_img_wrapper > img")).getAttribute("src");
+////                    while (qrcodeURL.contains("loading")) {
+////                        qrcodeURL = driver.findElement(By.className("tang-pass-qrcode-img")).getAttribute("src");
+////                    }
+//                        URL captcha = new URL(captchaURL);
+//                        BufferedImage saveCaptcha = ImageIO.read(captcha);
+//                        String captchaPath = System.getProperty("user.dir") + "/captcha.png";
+//                        ImageIO.write(saveCaptcha, "png", new File(captchaPath));
+//                    }
+
+                }
                 System.out.println(" -- signed");
                 numOfTieba++;
+
                 driver.close();
                 tabs = new ArrayList<>(driver.getWindowHandles());
                 driver.switchTo().window(tabs.get(tabs.size() - 1));

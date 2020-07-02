@@ -3,6 +3,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -28,6 +29,10 @@ class SeleniumUtility {
                 location.append("Linux/chromedriver");
             }
             System.setProperty("webdriver.chrome.driver", location.toString());
+//            ChromeOptions options = new ChromeOptions();
+//            options.addArguments("--blink-settings=imagesEnabled=false");
+//            return new ChromeDriver(options);
+
             return new ChromeDriver();
         } else {
             if (system.contains("Mac OS X")) {
